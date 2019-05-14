@@ -92,7 +92,7 @@
 
 # Maven clean package
 - name: maven clean package
-  command: mvn -f {{ playbook_dir }}/boxfuse/pom.xml clean package
+  command: mvn -f "{{ playbook_dir }}/boxfuse/pom.xml" clean package
 
 # tasks for installing tomcat
 - name: Create folder
