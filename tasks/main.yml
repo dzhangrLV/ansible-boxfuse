@@ -1,59 +1,65 @@
 ---
 # tasks for installing OpenJDK
-- name: Installing Pre-Reqs
-  apt:
-    name: apt-transport-https
-    state: present
-  become: true
-  with_items:
-    - apt-transport-https
-    - software-properties-common
 
-- name: Enabling deb http://http.debian.net/debian jessie-backports main
-  apt_repository:
-    repo: deb http://http.debian.net/debian jessie-backports main
-    state: present
-  become: true
-  when: ansible_distribution_release == "jessie"
+- name: Ensure java package is present
+    apt:
+      name: default-jdk
+      state: latest
 
-- name: Adding OpenJDK PPA
-  apt_repository:
-    repo: ppa:openjdk-r/ppa
-    state: present
-  become: true
-  when: >
-        ansible_distribution == "Ubuntu" and
-        ansible_distribution_version|int <= 16.04
-- name: debian | Installing Java
-  apt:
-    default_release: jessie-backports
-    name: "{{ item }}"
-    state: present
-  become: true
-  with_items: "{{ openjdk_debian_packages }}"
-  when: ansible_distribution_release == "jessie"
+#- name: Installing Pre-Reqs
+# apt:
+#    name: apt-transport-https
+#   state: present
+#  become: true
+#  with_items:
+#    - apt-transport-https
+#    - software-properties-common
 
-- name: Installing Java
-  apt:
-    name: "{{ item }}"
-    state: present
-  become: true
-  with_items: "{{ openjdk_debian_packages }}"
-  when: ansible_distribution_release != "jessie"
+#- name: Enabling deb http://http.debian.net/debian jessie-backports main
+#  apt_repository:
+#    repo: deb http://http.debian.net/debian jessie-backports main
+#    state: present
+#  become: true
+#  when: ansible_distribution_release == "jessie"
 
-- name: Set JAVA_HOME
-  lineinfile:
-    dest: /etc/environment
-    state: present
-    regexp: '^JAVA_HOME'
-    line: 'JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre'
+#- name: Adding OpenJDK PPA
+#  apt_repository:
+#   repo: ppa:openjdk-r/ppa
+#   state: present
+# become: true
+# when: >
+#        ansible_distribution == "Ubuntu" and
+#        ansible_distribution_version|int <= 16.04
+#- name: debian | Installing Java
+#  apt:
+#   default_release: jessie-backports
+#   name: "{{ item }}"
+#   state: present
+# become: true
+# with_items: "{{ openjdk_debian_packages }}"
+# when: ansible_distribution_release == "jessie"
 
-- name: Set JAVA_PATH
-  lineinfile:
-    dest: /etc/environment
-    state: present
-    regexp: '^PATH'
-    line: 'PATH=/usr/lib/jvm/java-8-openjdk-amd64/bin:/usr/lib/jvm/java-8-openjdk-amd64/jre/bin'
+#- name: Installing Java
+#  apt:
+#   name: "{{ item }}"
+#   state: present
+# become: true
+# with_items: "{{ openjdk_debian_packages }}"
+#  when: ansible_distribution_release != "jessie"
+
+#- name: Set JAVA_HOME
+#  lineinfile:
+#   dest: /etc/environment
+#    state: present
+#    regexp: '^JAVA_HOME'
+#    line: 'JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre'
+
+#- name: Set JAVA_PATH
+#  lineinfile:
+#    dest: /etc/environment
+#    state: present
+#    regexp: '^PATH'
+#    line: 'PATH=/usr/lib/jvm/java-8-openjdk-amd64/bin:/usr/lib/jvm/java-8-openjdk-amd64/jre/bin'
 
 - name: install maven (and other packages if needed)
   become: yes
