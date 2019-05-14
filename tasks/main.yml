@@ -77,10 +77,10 @@
     - { line: 'M2_HOME={{maven_home_parent_directory}}/apache-maven-{{maven_version}}' }
     - { line: 'PATH=$PATH:$M2_HOME/bin' }
 
-- name: Cleaning Up
-  file:
-    state: absent
-    path: '{{ maven_home_parent_directory }}/{{ maven_file_name }}'
+#- name: Cleaning Up
+#  file:
+#    state: absent
+#    path: '{{ maven_home_parent_directory }}/{{ maven_file_name }}'
 
 # Git Clone repository Boxfuse
 - name: Download Boxfuse
