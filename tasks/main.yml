@@ -84,10 +84,6 @@
 
 # Git Clone repository Boxfuse
 - name: Download Boxfuse
-    delegate_to: localhost
-    delegate_facts: no
-    run_once: true
-    become: false
     git:
       repo: "{{ boxfuse_repo }}"
       version: master
