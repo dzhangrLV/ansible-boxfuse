@@ -1,5 +1,5 @@
 ---
-- name: debian | Installing Pre-Reqs
+- name: Installing Pre-Reqs
   apt:
     name: apt-transport-https
     state: present
@@ -8,14 +8,14 @@
     - apt-transport-https
     - software-properties-common
 
-- name: debian | Enabling deb http://http.debian.net/debian jessie-backports main
+- name: Enabling deb http://http.debian.net/debian jessie-backports main
   apt_repository:
     repo: deb http://http.debian.net/debian jessie-backports main
     state: present
   become: true
   when: ansible_distribution_release == "jessie"
 
-- name: debian | Adding OpenJDK PPA
+- name: Adding OpenJDK PPA
   apt_repository:
     repo: ppa:openjdk-r/ppa
     state: present
@@ -32,7 +32,7 @@
   with_items: "{{ openjdk_debian_packages }}"
   when: ansible_distribution_release == "jessie"
 
-- name: debian | Installing Java
+- name: Installing Java
   apt:
     name: "{{ item }}"
     state: present
