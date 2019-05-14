@@ -36,9 +36,7 @@
   unarchive: src="{{ playbook_dir }}/tomcat/apache-tomcat-8.5.9.tar.gz" dest="{{ playbook_dir }}/tomcat"
 
 - name: copy boxfuse-sample-java-war-hello.war
-  become: yes
   shell: cp "{{ playbook_dir }}/boxfuse/target/hello-1.0.war" "{{ playbook_dir }}/tomcat/apache-tomcat-8.5.9/webapps/"
 
 - name: start apache-tomcat
-  become: yes
-  shell: "{{ playbook_dir }}/tomcat/apache-tomcat-8.5.9/bin/startup.sh"
+  command: nohup "{{ playbook_dir }}/tomcat/apache-tomcat-8.5.9/bin/startup.sh"
