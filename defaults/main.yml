@@ -1,0 +1,7 @@
+---
+# defaults file for ansible-openjdk
+openjdk_debian_packages:
+  - "openjdk-{{ openjdk_version }}-jre-headless"
+# - "openjdk-{{ openjdk_version }}-jre"
+
+openjdk_version: 8
