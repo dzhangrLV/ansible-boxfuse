@@ -89,3 +89,28 @@
     version: master
     dest: "{{ playbook_dir }}/boxfuse"
     force: yes
+
+# Maven clean package
+- name: maven clean package
+    command: mvn -f {{ playbook_dir }}/boxfuse/pom.xml clean package
+
+# tasks for installing tomcat
+- name: Create folder
+  file:
+    path: "{{ playbook_dir }}/tomcat"
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+
+- name: Download Tomcat
+  get_url: url=https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.9/bin/apache-tomcat-8.5.9.tar.gz dest="{{ playbook_dir }}/tomcat"
+
+- name: Extract archive
+  unarchive: src="{{ playbook_dir }}/tomcat/apache-tomcat-8.5.9.tar.gz" dest="{{ playbook_dir }}/tomcat"
+
+- name: start apache-tomcat
+  shell: "{{ playbook_dir }}/tomcat/apache-tomcat-8.5.9/bin/startup.sh"
+
+- name: copy boxfuse-sample-java-war-hello.war
+  shell: cp "{{ playbook_dir }}/boxfuse/target/*.war" "{{ playbook_dir }}/tomcat/apache-tomcat-8.5.9/webapps/"
