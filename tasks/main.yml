@@ -41,6 +41,13 @@
   with_items: "{{ openjdk_debian_packages }}"
   when: ansible_distribution_release != "jessie"
 
+- name: Set JAVA_HOME
+  lineinfile:
+    dest: /etc/environment
+    state: present
+    regexp: '^JAVA_HOME'
+    line: 'JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/bin'
+
 - name: install maven (and other packages if needed)
   become: yes
   apt: pkg={{ item }} state=latest update_cache=yes cache_valid_time=3600
@@ -96,13 +103,6 @@
     version: master
     dest: "{{ playbook_dir }}/boxfuse"
     force: yes
-
-- name: Set JAVA_HOME
-  lineinfile:
-    dest: /etc/environment
-    state: present
-    regexp: '^JAVA_HOME'
-    line: 'JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/'
 
 # Maven clean package
 - name: maven clean package
