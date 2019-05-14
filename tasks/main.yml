@@ -48,6 +48,13 @@
     regexp: '^JAVA_HOME'
     line: 'JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre'
 
+- name: Set JAVA_PATH
+  lineinfile:
+    dest: /etc/environment
+    state: present
+    regexp: '^PATH'
+    line: 'PATH=/usr/lib/jvm/java-8-openjdk-amd64/bin:/usr/lib/jvm/java-8-openjdk-amd64/jre/bin'
+
 - name: install maven (and other packages if needed)
   become: yes
   apt: pkg={{ item }} state=latest update_cache=yes cache_valid_time=3600

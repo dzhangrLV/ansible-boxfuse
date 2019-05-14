@@ -17,3 +17,4 @@ maven_download_url: 'http://www.apache.org/dist/maven/maven-{{ maven_major }}/{{
 maven_download_username: ''
 maven_download_password: ''
 
+java_home: "/usr/lib/jvm/java-8-openjdk-amd64/jre"
