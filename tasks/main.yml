@@ -41,41 +41,48 @@
   with_items: "{{ openjdk_debian_packages }}"
   when: ansible_distribution_release != "jessie"
 
-# tasks for installing apache-maven
-- name: Checking if Maven is already installed
-  stat:
-    path: '{{ maven_home_parent_directory }}/apache-maven-{{ maven_version }}'
-  register: maven_installed
-
-- name: Downloading Maven Binaries
-  get_url:
-    url: '{{ maven_download_url }}'
-    dest: '{{ maven_home_parent_directory }}/{{ maven_file_name }}'
-    url_username: '{{ maven_download_username }}'
-    url_password: '{{ maven_download_password }}'
-  when: maven_installed.stat.exists != True
-
-- name: Unarchive Maven Binaries
-  unarchive:
-    src: '{{ maven_home_parent_directory }}/{{ maven_file_name }}'
-    dest: '{{ maven_home_parent_directory }}'
-    copy: no
-  when: maven_installed.stat.exists != True
-
-- name: Remove old path configuration
-  file:
-    path: /etc/profile.d/maven.sh
-    state: absent
-
-- name: Maven path configuration
-  lineinfile:
-    dest: /etc/profile.d/maven.sh
-    line: '{{ item.line }}'
-    create: yes
-    state: present
+- name: install maven (and other packages if needed)
+  become: yes
+  apt: pkg={{ item }} state=latest update_cache=yes cache_valid_time=3600
   with_items:
-    - { line: 'M2_HOME={{maven_home_parent_directory}}/apache-maven-{{maven_version}}' }
-    - { line: 'PATH=$PATH:$M2_HOME/bin' }
+    - maven
+
+#
+# tasks for installing apache-maven
+#- name: Checking if Maven is already installed
+#  stat:
+#    path: '{{ maven_home_parent_directory }}/apache-maven-{{ maven_version }}'
+#  register: maven_installed
+
+#- name: Downloading Maven Binaries
+#  get_url:
+#    url: '{{ maven_download_url }}'
+#   dest: '{{ maven_home_parent_directory }}/{{ maven_file_name }}'
+#    url_username: '{{ maven_download_username }}'
+#    url_password: '{{ maven_download_password }}'
+# when: maven_installed.stat.exists != True
+
+#- name: Unarchive Maven Binaries
+#  unarchive:
+#    src: '{{ maven_home_parent_directory }}/{{ maven_file_name }}'
+#   dest: '{{ maven_home_parent_directory }}'
+#   copy: no
+#  when: maven_installed.stat.exists != True
+
+#- name: Remove old path configuration
+# file:
+#   path: /etc/profile.d/maven.sh
+#   state: absent
+
+#- name: Maven path configuration
+# lineinfile:
+#    dest: /etc/profile.d/maven.sh
+#    line: '{{ item.line }}'
+#   create: yes
+#    state: present
+#  with_items:
+#    - { line: 'M2_HOME={{maven_home_parent_directory}}/apache-maven-{{maven_version}}' }
+#    - { line: 'PATH=$PATH:$M2_HOME/bin' }
 
 #- name: Cleaning Up
 #  file:
