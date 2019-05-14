@@ -38,4 +38,4 @@
     state: present
   become: true
   with_items: "{{ openjdk_debian_packages }}"
-when: ansible_distribution_release != "jessie"
+  when: ansible_distribution_release != "jessie"
