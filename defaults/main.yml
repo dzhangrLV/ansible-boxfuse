@@ -1,11 +1,3 @@
----
-# defaults file for ansible-openjdk
-openjdk_debian_packages:
-  - "openjdk-{{ openjdk_version }}-jre-headless"
-# - "openjdk-{{ openjdk_version }}-jre"
-
-openjdk_version: 8
-
 boxfuse_repo: "https://github.com/boxfuse/boxfuse-sample-java-war-hello"
 
 # defaults file for apache-maven
@@ -16,5 +8,3 @@ maven_file_name: apache-maven-{{ maven_version }}-bin.tar.gz
 maven_download_url: 'http://www.apache.org/dist/maven/maven-{{ maven_major }}/{{ maven_version }}/binaries/{{ maven_file_name }}'
 maven_download_username: ''
 maven_download_password: ''
-
-java_home: "/usr/lib/jvm/java-8-openjdk-amd64/jre"
