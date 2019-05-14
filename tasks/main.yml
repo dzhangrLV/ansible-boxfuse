@@ -84,8 +84,8 @@
 
 # Git Clone repository Boxfuse
 - name: Download Boxfuse
-    git:
-      repo: "{{ boxfuse_repo }}"
-      version: master
-      dest: "{{ playbook_dir }}/boxfuse"
-      force: yes
+  git:
+    repo: "{{ boxfuse_repo }}"
+    version: master
+    dest: "{{ playbook_dir }}/boxfuse"
+    force: yes
