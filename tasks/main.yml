@@ -1,4 +1,5 @@
 ---
+# tasks for installing OpenJDK
 - name: Installing Pre-Reqs
   apt:
     name: apt-transport-https
@@ -39,3 +40,56 @@
   become: true
   with_items: "{{ openjdk_debian_packages }}"
   when: ansible_distribution_release != "jessie"
+
+# tasks for installing apache-maven
+- name: Checking if Maven is already installed
+  stat:
+    path: '{{ maven_home_parent_directory }}/apache-maven-{{ maven_version }}'
+  register: maven_installed
+
+- name: Downloading Maven Binaries
+  get_url:
+    url: '{{ maven_download_url }}'
+    dest: '{{ maven_home_parent_directory }}/{{ maven_file_name }}'
+    url_username: '{{ maven_download_username }}'
+    url_password: '{{ maven_download_password }}'
+  when: maven_installed.stat.exists != True
+
+- name: Unarchive Maven Binaries
+  unarchive:
+    src: '{{ maven_home_parent_directory }}/{{ maven_file_name }}'
+    dest: '{{ maven_home_parent_directory }}'
+    copy: no
+  when: maven_installed.stat.exists != True
+
+- name: Remove old path configuration
+  file:
+    path: /etc/profile.d/maven.sh
+    state: absent
+
+- name: Maven path configuration
+  lineinfile:
+    dest: /etc/profile.d/maven.sh
+    line: '{{ item.line }}'
+    create: yes
+    state: present
+  with_items:
+    - { line: 'M2_HOME={{maven_home_parent_directory}}/apache-maven-{{maven_version}}' }
+    - { line: 'PATH=$PATH:$M2_HOME/bin' }
+
+- name: Cleaning Up
+  file:
+    state: absent
+    path: '{{ maven_home_parent_directory }}/{{ maven_file_name }}'
+
+# Git Clone repository Boxfuse
+- name: Download Boxfuse
+    delegate_to: localhost
+    delegate_facts: no
+    run_once: true
+    become: false
+    git:
+      repo: "{{ boxfuse_repo }}"
+      version: master
+      dest: "{{ playbook_dir }}/boxfuse"
+      force: yes
