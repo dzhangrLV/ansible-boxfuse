@@ -97,8 +97,9 @@
     dest: "{{ playbook_dir }}/boxfuse"
     force: yes
 
-- name: Update path for maven use
-  shell: export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/jre"
+- name: Set JAVA_HOME
+  lineinfile: dest=/etc/environment state=present regexp='^JAVA_HOME' >
+     line='JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre'
 
 # Maven clean package
 - name: maven clean package
